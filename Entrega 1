@@ -1,0 +1,120 @@
+###      Alumno: Pedro Prieto      ###
+###      Comision: 39785           ###
+
+
+
+CREATE SCHEMA analisis_de_gastos;
+
+USE analisis_de_gastos;
+
+
+
+### Tablas Descripcion
+
+create TABLE patente
+(id_vehiculo varchar(10) NOT NULL,
+patente varchar(10) NOT NULL,
+primary key(id_vehiculo)
+);
+
+
+create TABLE chofer
+(id_chofer varchar(10) NOT NULL,
+nom_chofer varchar(40) NOT NULL,
+apell_chofer varchar(40) NOT NULL,
+primary key(id_chofer)
+);
+
+
+create TABLE descripcion_ubicacion
+(cod_ubicacion varchar(10) NOT NULL,
+ubicacion varchar(50) NOT NULL,
+primary key(cod_ubicacion)
+);
+
+
+create TABLE descripcion_combustible
+(cod_descripcion varchar(10) NOT NULL,
+descripcion varchar(50) NOT NULL,
+primary key(cod_descripcion)
+);
+
+### Tablas Transaccion
+
+create TABLE peaje
+(
+id_vehiculo varchar(10) NOT NULL,
+id_chofer varchar(10) NOT NULL,
+fecha date NOT NULL,
+gasto int NOT NULL,
+cod_ubicacion varchar(10) NOT NULL,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (id_chofer) references chofer(id_chofer),
+foreign key (cod_ubicacion) references descripcion_ubicacion(cod_ubicacion)
+);
+
+
+create TABLE tramo
+(
+id_vehiculo varchar(10) NOT NULL,
+id_chofer varchar(10) NOT NULL,
+fecha date NOT NULL,
+kilometros int NOT NULL,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (id_chofer) references chofer(id_chofer)
+);
+
+
+create TABLE combustible_uno
+(
+id_vehiculo varchar(10) NOT NULL,
+id_chofer varchar(10) NOT NULL,
+fecha date NOT NULL,
+gasto int NOT NULL,
+litros int NOT NULL,
+cod_descripcion varchar(10) NOT NULL,
+descuento int NOT NULL,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (id_chofer) references chofer(id_chofer),
+foreign key (cod_descripcion) references descripcion_combustible(cod_descripcion)
+);
+
+
+create TABLE combustible_dos
+(
+id_vehiculo varchar(10) NOT NULL,
+id_chofer varchar(10) NOT NULL,
+fecha date NOT NULL,
+gasto int NOT NULL,
+litros int NOT NULL,
+cod_descripcion varchar(10) NOT NULL,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (id_chofer) references chofer(id_chofer),
+foreign key (cod_descripcion) references descripcion_combustible(cod_descripcion)
+);
+
+### Tablas de Hecho
+
+create TABLE control_de_gasto
+(
+id_vehiculo varchar(10) NOT NULL,
+id_chofer varchar(10) NOT NULL,
+fecha date NOT NULL,
+kilometros int,
+gasto int,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (id_chofer) references chofer(id_chofer)
+);
+
+
+create TABLE comparacion_combustible
+(
+id_vehiculo varchar(10) NOT NULL,
+cod_descripcion varchar(10) NOT NULL,
+descripcion varchar(50) NOT NULL,
+gasto int NOT NULL,
+litros int NOT NULL,
+descuento int,
+foreign key (id_vehiculo) references patente(id_vehiculo),
+foreign key (cod_descripcion) references descripcion_combustible(cod_descripcion)
+);
